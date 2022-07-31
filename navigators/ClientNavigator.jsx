@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { setStateAction } from '../store/ActivityActions';
 
 import HomeScreen from '../screens/HomeScreen';
+import TestScreen from '../screens/TestScreen';
 
 import HomeHeaderComponent from '../components/HomeHeaderComponent';
 import PanierButtonComponent from '../components/PanierButtonComponent';
@@ -27,7 +28,9 @@ const mapStateToProps = (state) => {
 class ClientNavigator extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showcard : false
+    };
     this.navigation = this.props.navigation;
   }
 
@@ -38,7 +41,13 @@ class ClientNavigator extends React.Component {
   render(){
     return (
       <View style={{width: '100%', height:'100%' }}>
-        <HomeHeaderComponent navigation={this.navigation} />
+
+        <HomeHeaderComponent 
+          navigation={this.navigation} 
+          showcard={this.state.showcard} 
+          setshowcard={()=> this.setState({showcard: true})} 
+        />
+
         <Stack.Navigator>
           <Stack.Screen 
             name="Home" 
@@ -47,8 +56,21 @@ class ClientNavigator extends React.Component {
             navigation={this.navigation}
             options={{ headerLeft: false, headerTitle: false, headerStyle: { height: 0 },}} 
           />
+          <Stack.Screen 
+            name="Test" 
+            component={TestScreen}
+            route={this.route} 
+            navigation={this.navigation}
+            options={{ headerLeft: false, headerTitle: false, headerStyle: { height: 0 },}} 
+          />
         </Stack.Navigator>
-        <PanierButtonComponent navigation={this.navigation} />
+
+        <PanierButtonComponent 
+          navigation={this.navigation} 
+          showcard={this.state.showcard} 
+          setshowcard={()=> this.setState({showcard: false})} 
+        />
+
       </View>
     );
   }

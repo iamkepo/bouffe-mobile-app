@@ -136,16 +136,16 @@ function PanierButtonComponent(props) {
   return (
     <>
       {
-        click ? 
+        props.showcard ? 
         <View 
           style={{
             position: "absolute",top: 0,zIndex:4,width: "100%",height: screen.height,
             backgroundColor: showlist == 0 ? '#000000AA' : "#EEE",shadowColor: '#000',
-            shadowRadius: 5,shadowOffset: {height: 10,width: 10},shadowOpacity: 0.5,elevation : 10, 
+            shadowRadius: 5,shadowOffset: {height: 10,width: 10},shadowOpacity: 0.5,elevation : 10
           }}
         >
-          <ScrollView style={{width: "100%",}}>
-          { showlist == 0 ? <TouchableOpacity onPress={()=> setclick(false)} style={{width: "100%",height: props.data.panier.length < 2 ? (screen.height - screen.height/4) : screen.height/2}}></TouchableOpacity> : false}
+          <ScrollView style={{width: "100%"}}>
+          { showlist == 0 ? <TouchableOpacity onPress={()=> props.setshowcard()} style={{width: "100%",height: props.data.panier.length < 2 ? (screen.height - screen.height/4) : screen.height/2}}></TouchableOpacity> : false}
           {
             showlist == 1 ?
             <View style={{width: "100%",height: screen.height,justifyContent: "center",alignSelf: "center",backgroundColor: '#FFF',borderRadius: 5, paddingTop: 50,}}>
@@ -252,7 +252,7 @@ function PanierButtonComponent(props) {
           {showlist != 0 ? false : 
             props.data.panier.length > 0 ?
             props.data.panier.map((p, j)=>(
-            <View key={j} style={{width: "95%",minHeight: screen.height/4, justifyContent: "center",alignSelf: "center",backgroundColor: '#FFF',borderRadius: 5,marginTop:10}}>
+            <View key={j} style={{width: "95%",minHeight: screen.height/4, justifyContent: "center",alignSelf: "center",backgroundColor: '#FFF',borderRadius: 5,marginBottom: 50}}>
 
               <View style={{width: "90%",height: 50,alignSelf: "center",flexDirection: "row",alignItems: "center",justifyContent: "space-between"}}>
                 <View style={{width: "30%",height: 15,overflow: "hidden",flexDirection: "row",}}>
@@ -362,22 +362,6 @@ function PanierButtonComponent(props) {
         </View>
         
         : false
-      }
-      {
-        !click ? 
-        <TouchableOpacity 
-          disabled={false} 
-          onPress={()=> setclick(true)} 
-          style={{width: 60,height: 60,alignItems: "center",justifyContent: "center",position: "absolute",backgroundColor: click ? "#FFF" : "#FDC800DD",borderRadius: 50,bottom: click ? 20 : 60,right: 20,zIndex: 5,shadowColor: '#000',shadowRadius: 5,shadowOffset: {height: 10,width: 10},shadowOpacity: 0.5,elevation : 10,}}
-        >
-          {
-            props.data.panier.length > 0 ?
-            <Text style={{color: "#FFF",fontSize: 25}}>{props.data.panier.length}</Text> 
-            : 
-            <AntDesign name='shoppingcart' size={25} style={{color: "#FFF",}} />
-          }
-        </TouchableOpacity> 
-        :false
       }
     </>
   );

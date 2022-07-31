@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
+import { View, TouchableOpacity, Image, Text } from 'react-native';
 import { AntDesign, MaterialIcons } from 'react-native-vector-icons';
 
 import { connect } from 'react-redux';
@@ -39,7 +39,7 @@ function HomeHeaderComponent(props) {
         elevation : 10,
       }}
     >
-    <TouchableOpacity
+    {/* <TouchableOpacity
       onPress={()=> props.navigation.navigate('Profil')}
       style={{
         width: 30,
@@ -57,30 +57,41 @@ function HomeHeaderComponent(props) {
           color: "#FFF",
         }}
       />
-    </TouchableOpacity>
+    </TouchableOpacity> */}
     <Image 
         source={require("../assets/LogoBouffeApp2.png")} 
         style={{ 
           width: "45%", 
           height: "100%", 
           resizeMode: "contain",
+          marginLeft: 20,
         }}
       />
-      <View style={{width: '25%', marginRight: 20,flexDirection: "row", justifyContent: "space-between",}}>
+      <View style={{width: '30%', marginRight: 20,flexDirection: "row", justifyContent: "space-between",}}>
       <TouchableOpacity
-        onPress={()=> props.navigation.navigate('Notification')}
+        onPress={()=> props.setshowcard()}
         style={{
-          width: 30,
+          width: 60,
           height: 30,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between", 
         }}
       >
-        <MaterialIcons
-          name='notifications'
+        <AntDesign
+          name='shoppingcart'
           size={30}
           style={{
-            color:  props.data.myState.awaitNotif ? "#B51827" : "#000",
+            color: "#000",
           }}
         />
+        <View style={{ width: "50%",height: "100%",alignItems: "center",justifyContent: "center", backgroundColor: props.data.panier.length > 0 ? "#FDC800DD" : "#FFF",borderRadius: 50 }} >
+          {
+            props.data.panier.length > 0 ?
+            <Text style={{ color: "#FFF", fontSize: 15 }}>{props.data.panier.length} / {}</Text> 
+            : false
+          }
+        </View> 
       </TouchableOpacity>
       <TouchableOpacity
         onPress={()=> props.navigation.navigate('Search')}

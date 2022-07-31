@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { favorieAction, panierAction, parseAction, listAction } from '../store/ActivityActions';
 
+import DetailPlatComponent from '../components/DetailPlatComponent';
 import CardPlatComponent from '../components/CardPlatComponent';
+
 import List from '../helper/const';
 
 
@@ -39,7 +41,9 @@ class HomeScreen extends React.Component {
     this.state = {
       trie_d: false,
       trie_p: false,
-      refreshing: false
+      refreshing: false,
+      showdetail: false,
+      detail: {}
     };
     this.tab = [],
     this.navigation = this.props.navigation;
@@ -56,6 +60,7 @@ class HomeScreen extends React.Component {
 
   
   async componentDidMount(){
+    
     this.onRefresh();
     
     this.backHandler = BackHandler.addEventListener(
@@ -64,15 +69,11 @@ class HomeScreen extends React.Component {
     );
   }
   onRefresh = () => {
-    this.setState({ trie_d: false, trie_p: false });
-     this.setState({refreshing: true});
+     this.setState({refreshing: true, trie_d: false, trie_p: false });
   
-    wait(2000).then(() =>{
-      
-      this.getLocation(List);
-
-      this.setState({refreshing: false}) ;
-    });
+    // this.props.listAction(this.shuffle(List));
+    this.getLocation(List);
+    wait(2000).then(() =>{this.setState({refreshing: false})});
   }
   async getLocation(list){
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -114,13 +115,20 @@ class HomeScreen extends React.Component {
     return array;
   }
   
+  detail(i, item){
+    this.props.parseAction({i: i, item: item});
+    //this.navigation.navigate('Restaurant');
+  }
+
   render(){    
     return (
       <ScrollView
         contentContainerStyle={{}}
         refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
       >
-        <View style={{width: "100%",height: 50,flexDirection: "row",alignItems: "center",justifyContent: "space-around"}}>
+        {
+          !this.state.showdetail ?
+          <View style={{width: "100%",height: 50,flexDirection: "row",alignItems: "center",justifyContent: "space-around"}}>
 
           <View style={{width: "25%",height: "100%",flexDirection: "row",alignItems: "center",justifyContent: "space-between"}}>
             <Ionicons name='filter' size={25} style={{color: "#000",}}/>
@@ -143,20 +151,26 @@ class HomeScreen extends React.Component {
             <AntDesign name={this.state.trie_d ? 'up' : 'down'} size={20} style={{color: "#000",}}/>
           </TouchableOpacity>
 
-        </View>
+          </View>
+        : false
+        }
 
         <View style={styles.container}>
           {
+            this.state.showdetail ?
+            <DetailPlatComponent item={this.state.detail} />
+            :
             this.props.data.list.map((item, i)=>(
               <CardPlatComponent
                 key={i} 
                 i={i} 
                 item={item}
+                detail={()=> this.setState({detail: item, showdetail: true})}
               />
             ))
           }
-          <StatusBar style="auto" />
         </View>
+        <StatusBar style="auto" />
       </ScrollView>
     );
   }

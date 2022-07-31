@@ -192,7 +192,7 @@ function monReducer (state = INITIAL_STATE, action) {
       state.list.forEach(y =>(
         y.favorie = (action.payload.name == y.name && action.payload.prix == y.prix && action.payload.restaurant.adresse.contact.numero == y.restaurant.adresse.contact.numero) ? !y.favorie : y.favorie
       ));
-      session("client", state.list);
+      // session("client", state.list);
 
       nextState = {
           ...state,
@@ -201,12 +201,11 @@ function monReducer (state = INITIAL_STATE, action) {
       return nextState
 
     case 'LIST':
-
       if (action.payload != null) {
         state.list = action.payload
       }
 
-      session("client", state.list);
+       session("client", state.list);
       
       nextState = {
           ...state,
@@ -223,7 +222,7 @@ function monReducer (state = INITIAL_STATE, action) {
         state.user[action.payload.index] =  action.payload.value
       }
 
-      session('user', state.user);
+      // session('user', state.user);
 
       nextState = {
           ...state,
@@ -237,7 +236,7 @@ function monReducer (state = INITIAL_STATE, action) {
         state.list = addPlat( state.list, action.payload );
       }
 
-      session("client", state.list);
+      // session("client", state.list);
       
       nextState = {
           ...state,
@@ -249,7 +248,7 @@ function monReducer (state = INITIAL_STATE, action) {
         
         state.list[action.payload.i || state.i] = action.payload.item;
         //console.log(state.list[action.payload.i || state.i]);
-        session("client", state.list);
+        // session("client", state.list);
         
         nextState = {
             ...state,
@@ -260,7 +259,7 @@ function monReducer (state = INITIAL_STATE, action) {
     case '_PLAT':
       var stock = tab_trie(state.list, action.payload);
       
-      session("client", stock);
+      // session("client", stock);
       
       nextState = {
           ...state,
@@ -281,7 +280,7 @@ function monReducer (state = INITIAL_STATE, action) {
         x.restaurant_adresse.lieu.latitude= action.payload.restaurant_adresse.lieu.latitude ? action.payload.restaurant_adresse.lieu.latitude : x.restaurant_adresse.lieu.latitude;
       });
 
-      session("client", state.list);
+      // session("client", state.list);
 
       nextState = {
           ...state,
@@ -294,7 +293,7 @@ function monReducer (state = INITIAL_STATE, action) {
         state.paniers[ action.payload.p] = undefined;
         state.panier = tab_trie(state.panier, state.panier.indexOf(action.payload.p));
 
-      session("commande", state.commande);
+      // session("commande", state.commande);
       
       nextState = {
           ...state,
@@ -310,7 +309,7 @@ function monReducer (state = INITIAL_STATE, action) {
       } else {
         state.commande = state.commande;
       }
-      session("commande", state.commande);
+      // session("commande", state.commande);
       
       nextState = {
           ...state,
@@ -342,7 +341,7 @@ function monReducer (state = INITIAL_STATE, action) {
       } else {
         state.notifListSent = state.notifListSent;
       }
-      session('notification', state.notifListSent);
+      // session('notification', state.notifListSent);
         
         nextState = {
             ...state,
@@ -353,7 +352,7 @@ function monReducer (state = INITIAL_STATE, action) {
     case 'NOTIFICATION_ADD':
       let notifTab = addPlat( state.notifListSent, action.payload );
 
-      session('notification', notifTab );
+      // session('notification', notifTab );
         
         nextState = {
             ...state,

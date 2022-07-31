@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "bouffe-mobile-app",
-    "slug": "bouffe-mobile-app",
+    "name": "BouffesApp",
+    "slug": "BouffesApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/appicon.png",

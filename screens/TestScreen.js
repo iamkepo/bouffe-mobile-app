@@ -7,7 +7,7 @@ export default function TestScreen() {
   } = useColorMode();
   return (
     <Center>
-      <Box p="4" flex="1" maxW="300" w="100%" bg={colorMode === "dark" ? "coolGray.800" : "warmGray.50"}>
+      <Box p="4" flex="1" mt="20" maxW="300" w="100%" h="600" bg={colorMode === "dark" ? "coolGray.800" : "warmGray.50"}>
         <Text fontSize="lg" display="flex" mb="20">
           The active color mode is{" "}
           <Text bold fontSize="lg">
