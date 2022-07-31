@@ -59,7 +59,7 @@ class CardPlatComponent extends React.Component {
             style={{width: 50,height: "100%",alignItems: "center",justifyContent: "center"}}
             onPress={()=> this.props.favorieAction(this.props.item)}
           >
-            <AntDesign name='heart' size={25} style={{color: item.favorie ? "#B51827" : "#BBB",}}/>
+            <AntDesign name='heart' size={25} style={{color: this.props.item.favorie ? "#B51827" : "#BBB",}}/>
           </TouchableOpacity>
 
           <TouchableOpacity 
