@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView, BackHandler, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity, ScrollView, BackHandler, RefreshControl } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { getDistance } from 'geolib';
 import * as Location from 'expo-location';
@@ -13,6 +14,7 @@ import DetailPlatComponent from '../components/DetailPlatComponent';
 import CardPlatComponent from '../components/CardPlatComponent';
 
 import { plats, restos } from '../helper/const';
+import { normalize } from "../helper/fonts";
 
 
 const mapDispatchToProps = dispatch => (
@@ -43,9 +45,9 @@ class HomeScreen extends React.Component {
       trie_p: false,
       refreshing: false,
       showdetail: false,
-      detail: {}
+      detail: {},
+      list: []
     };
-    this.tab = [],
     this.navigation = this.props.navigation;
   }
 
@@ -62,7 +64,6 @@ class HomeScreen extends React.Component {
     this.backHandler.remove();
   }
 
-  
   async componentDidMount(){
     
     this.onRefresh();
@@ -72,8 +73,9 @@ class HomeScreen extends React.Component {
       this.backAction
     );
   }
+
   onRefresh = () => {
-     this.setState({refreshing: true, trie_d: false, trie_p: false });
+     this.setState({refreshing: true, trie_d: false, trie_p: false, list: plats });
   
     this.props.listAction( "plat", this.shuffle(plats));
     this.props.listAction( "resto", this.shuffle(restos));
@@ -81,6 +83,7 @@ class HomeScreen extends React.Component {
     //this.getLocation(List);
     wait(2000).then(() =>{this.setState({refreshing: false})});
   }
+
   async getLocation(list){
     let { status } = await Location.requestForegroundPermissionsAsync();
     let location = await Location.getCurrentPositionAsync({});
@@ -129,71 +132,109 @@ class HomeScreen extends React.Component {
   find_id(restaurant) {
     return this.props.data.list.resto.find(el => el._id == restaurant)
   }
+  
+  async updateSearch(text) {
+    this.setState({query: text});
+    if (text != "" ){
+      let stock = [];
+      this.state.list.forEach(item => {
+        if (item.name.toLowerCase().search(text.toLowerCase()) != -1) {
+          stock = stock.concat(item);
+        }
+      });
+      this.props.listAction( "plat", stock);
+    }else{
+      this.props.listAction( "plat", this.state.list);
+    }
+  }
+
   render(){    
     return (
-      <ScrollView
-        contentContainerStyle={{}}
-        refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
-      >
+      <SafeAreaView style={styles.container}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Recherche"
+          placeholderTextColor="#000"
+          value={this.state.query}
+          onChangeText={(text) => this.updateSearch(text)}
+        />
+        <ScrollView
+          contentContainerStyle={{}}
+          refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
+        >
+          <View style={{width: "100%",height: 50,flexDirection: "row",alignItems: "center",justifyContent: "space-around", marginTop: "2%"}}>
+
+            <View style={{width: "25%",height: "100%",flexDirection: "row",alignItems: "center",justifyContent: "space-between"}}>
+              <Ionicons name='filter' size={normalize(25)} style={{color: "#000",}}/>
+              <Text style={{ fontWeight: "bold", fontSize: normalize(14) }} >Filtré par: </Text>
+            </View>
+
+            <TouchableOpacity 
+              onPress={()=> (this.trie_prix(this.state.trie_p ? true : false), this.setState({trie_p: !this.state.trie_p, trie_d: false }))} 
+              style={{width: "20%",height: "80%",flexDirection: "row",alignItems: "center",justifyContent: "space-evenly",backgroundColor: "#FFF",borderRadius: 5,}}
+            >
+              <Text style={{ color: "#000", fontSize: normalize(14) }} >prix</Text> 
+              <AntDesign name={this.state.trie_p ? 'up' : 'down'} size={normalize(20)} style={{color: "#000",}}/>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              onPress={()=> (this.trie_distance(this.state.trie_d ? true : false), this.setState({trie_d: !this.state.trie_d, trie_p: false}))} 
+              style={{width: "25%",height: "80%",flexDirection: "row",alignItems: "center",justifyContent: "space-evenly",backgroundColor: "#FFF",borderRadius: 5,}}
+            >
+              <Text style={{ color: "#000", fontSize: normalize(14) }} >distance</Text> 
+              <AntDesign name={this.state.trie_d ? 'up' : 'down'} size={normalize(20)} style={{color: "#000",}}/>
+            </TouchableOpacity>
+
+          </View>
+
+          <View style={styles.sous}>
+            {
+              this.props.data.list.plat.map((item, i)=>(
+                <CardPlatComponent
+                  key={i} 
+                  i={i} 
+                  item={item}
+                  find_id={()=> this.find_id(item.restaurant)}
+                  detail={()=> this.setState({detail: item, showdetail: true})}
+                />
+              ))
+            }
+          </View>
+          <StatusBar style="auto" />
+        </ScrollView>
         {
-          !this.state.showdetail ?
-          <View style={{width: "100%",height: 50,flexDirection: "row",alignItems: "center",justifyContent: "space-around"}}>
-
-          <View style={{width: "25%",height: "100%",flexDirection: "row",alignItems: "center",justifyContent: "space-between"}}>
-            <Ionicons name='filter' size={25} style={{color: "#000",}}/>
-            <Text style={{ fontWeight: "bold" }} >Filtré par: </Text>
-          </View>
-
-          <TouchableOpacity 
-            onPress={()=> (this.trie_prix(this.state.trie_p ? true : false), this.setState({trie_p: !this.state.trie_p, trie_d: false }))} 
-            style={{width: "20%",height: "80%",flexDirection: "row",alignItems: "center",justifyContent: "space-evenly",backgroundColor: "#FFF",borderRadius: 5,}}
-          >
-            <Text style={{ color: "#000" }} >prix</Text> 
-            <AntDesign name={this.state.trie_p ? 'up' : 'down'} size={20} style={{color: "#000",}}/>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            onPress={()=> (this.trie_distance(this.state.trie_d ? true : false), this.setState({trie_d: !this.state.trie_d, trie_p: false}))} 
-            style={{width: "25%",height: "80%",flexDirection: "row",alignItems: "center",justifyContent: "space-evenly",backgroundColor: "#FFF",borderRadius: 5,}}
-          >
-            <Text style={{ color: "#000" }} >distance</Text> 
-            <AntDesign name={this.state.trie_d ? 'up' : 'down'} size={20} style={{color: "#000",}}/>
-          </TouchableOpacity>
-
-          </View>
-        : false
+          this.state.showdetail &&
+          <DetailPlatComponent 
+            find_id={()=> this.find_id(this.state.detail.restaurant)} 
+            item={this.state.detail} 
+            close={()=> this.setState({showdetail: false})}
+          />
         }
-
-        <View style={styles.container}>
-          {
-            this.state.showdetail ?
-            <DetailPlatComponent 
-              find_id={()=> this.find_id(this.state.detail.restaurant)} 
-              item={this.state.detail} 
-              close={()=> this.setState({showdetail: false})}
-            />
-            :
-            this.props.data.list.plat.map((item, i)=>(
-              <CardPlatComponent
-                key={i} 
-                i={i} 
-                item={item}
-                find_id={()=> this.find_id(item.restaurant)}
-                detail={()=> this.setState({detail: item, showdetail: true})}
-              />
-            ))
-          }
-        </View>
-        <StatusBar style="auto" />
-      </ScrollView>
+      </SafeAreaView>
     );
   }
 }
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
+    height: "100%",
+    alignItems: 'center',
+    justifyContent: "flex-start",
+  },
+  textInput: {
+    width: "90%",
+    height: 40,
+    borderWidth: 0,
+    borderRadius: 6,
+    marginTop: "-5%",
+    marginBottom: "5%",
+    paddingHorizontal: "5%",
+    backgroundColor: '#FFF',
+    fontSize: normalize(14)
+  },
+  sous: {
     width: "100%", 
     minHeight: screen.height,
-    //backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: "flex-start",
     paddingTop: 0,

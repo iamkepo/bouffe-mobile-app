@@ -1,7 +1,7 @@
 import React from 'react' ;
 import { StyleSheet, TouchableOpacity } from 'react-native' ;
 
-class ButtonFullMaterial extends React.Component {
+class ButtonAdaptMaterial extends React.Component {
   constructor( props ) {
     super( props ) ;
   }
@@ -14,6 +14,7 @@ class ButtonFullMaterial extends React.Component {
           backgroundColor: this.props.bg || "#FFF", 
           borderColor: this.props.bc || "#FFF", 
           backgroundColor: this.props.bg || "#FFF", 
+          width: this.props.w || 100, 
           height: this.props.h || 45, 
           justifyContent: this.props.icon ? "space-between" : "center" 
         }]} 
@@ -27,7 +28,6 @@ class ButtonFullMaterial extends React.Component {
 
 const styles = StyleSheet.create({
   button: {
-    width: "100%",
     borderWidth: 0.5,
     borderRadius: 6,
     flexDirection: "row",
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ButtonFullMaterial ;
+export default ButtonAdaptMaterial ;

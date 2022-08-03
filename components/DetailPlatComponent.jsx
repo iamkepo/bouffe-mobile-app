@@ -7,6 +7,7 @@ import { favorieAction, panierAction } from '../store/ActivityActions';
 
 import PhotoComponent from '../components/PhotoComponent';
 
+import { normalize } from "../helper/fonts";
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
@@ -52,28 +53,28 @@ class DetailPlatComponent extends React.Component {
         <View style={{width: "100%", height: "60%",  padding: "5%"}}>
 
           <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
-            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Restaurant: </Text>
-            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#000", fontSize: 16, }}> {this.props.find_id().name} </Text>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: normalize(16), }}>Restaurant: </Text>
+            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#000", fontSize: normalize(16), }}> {this.props.find_id().name} </Text>
           </View>
 
           <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
-            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Situé a: </Text>
-            <Text numberOfLines={2} style={{ width: "70%", fontWeight: "bold", color: "#000", fontSize: 16, }}> {this.state.identify} </Text>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: normalize(16), }}>Situé a: </Text>
+            <Text numberOfLines={2} style={{ width: "70%", fontWeight: "bold", color: "#000", fontSize: normalize(16), }}> {this.state.identify} </Text>
           </View>
           
           <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
-            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Numéro: </Text>
-            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#B51827", fontSize: 16, }}> {this.props.find_id().adresse.contact.numero} </Text>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: normalize(16), }}>Numéro: </Text>
+            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#B51827", fontSize: normalize(16), }}> {this.props.find_id().adresse.contact.numero} </Text>
           </View>
 
           <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
-            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Email: </Text>
-            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#FDC800", fontSize: 16, }}> {this.props.find_id().adresse.contact.email} </Text>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: normalize(16), }}>Email: </Text>
+            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#FDC800", fontSize: normalize(16), }}> {this.props.find_id().adresse.contact.email} </Text>
           </View>
           
           <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
-            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Site web: </Text>
-            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#FDC800", fontSize: 16, }}> {this.props.find_id().adresse.contact.web} </Text>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: normalize(16), }}>Site web: </Text>
+            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#FDC800", fontSize: normalize(16), }}> {this.props.find_id().adresse.contact.web} </Text>
           </View>
 
         </View>

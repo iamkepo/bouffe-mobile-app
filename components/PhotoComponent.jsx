@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { parseAction, platAction, favorieAction } from '../store/ActivityActions';
 
+import { normalize } from "../helper/fonts";
+
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
@@ -52,8 +54,8 @@ class PhotoComponent extends React.Component {
           <Ionicons name="chevron-back" size={25} style={{color: this.props.item.favorie ? "#B51827" : "#BBB",}}/>
         </TouchableOpacity>
 
-        <Text numberOfLines={1} style={{width: "70%", color: "#FFF", fontSize: 18, fontWeight: "bold"}}>{this.props.item.name}</Text>
-        <Text numberOfLines={1} style={{width: "20%", color: "#B51827", fontSize: 18, fontWeight: "bold", textAlign: "center"}}>{this.props.item.prix} F</Text>
+        <Text numberOfLines={1} style={{width: "70%", color: "#FFF", fontSize: normalize(18), fontWeight: "bold"}}>{this.props.item.name}</Text>
+        <Text numberOfLines={1} style={{width: "20%", color: "#B51827", fontSize: normalize(18), fontWeight: "bold", textAlign: "center"}}>{this.props.item.prix} F</Text>
 
       </View>
         <View style={{width: "100%",height: "20%", alignItems: "center", justifyContent: "space-between", flexDirection: "row",}}>
