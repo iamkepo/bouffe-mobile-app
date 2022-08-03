@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView
 import { StatusBar } from 'expo-status-bar';
 import { getDistance } from 'geolib';
 import * as Location from 'expo-location';
-import { AntDesign, Octicons, Ionicons } from 'react-native-vector-icons';
+import { AntDesign, Ionicons } from 'react-native-vector-icons';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -12,7 +12,7 @@ import { favorieAction, panierAction, parseAction, listAction } from '../store/A
 import DetailPlatComponent from '../components/DetailPlatComponent';
 import CardPlatComponent from '../components/CardPlatComponent';
 
-import List from '../helper/const';
+import { plats, restos } from '../helper/const';
 
 
 const mapDispatchToProps = dispatch => (
@@ -50,7 +50,11 @@ class HomeScreen extends React.Component {
   }
 
   backAction = () => {
-    BackHandler.exitApp()
+    if (this.state.showdetail) {
+      this.setState({showdetail: false})
+    } else {
+      BackHandler.exitApp()
+    }
     return true;
   };
 
@@ -71,8 +75,10 @@ class HomeScreen extends React.Component {
   onRefresh = () => {
      this.setState({refreshing: true, trie_d: false, trie_p: false });
   
-    // this.props.listAction(this.shuffle(List));
-    this.getLocation(List);
+    this.props.listAction( "plat", this.shuffle(plats));
+    this.props.listAction( "resto", this.shuffle(restos));
+
+    //this.getLocation(List);
     wait(2000).then(() =>{this.setState({refreshing: false})});
   }
   async getLocation(list){
@@ -84,7 +90,7 @@ class HomeScreen extends React.Component {
         { latitude: location.coords.latitude, longitude: location.coords.longitude }
       );
     });
-    this.props.listAction(this.shuffle(list));
+    this.props.listAction( "plat", this.shuffle(list));
   }
 
   trie_distance(a){
@@ -120,6 +126,9 @@ class HomeScreen extends React.Component {
     //this.navigation.navigate('Restaurant');
   }
 
+  find_id(restaurant) {
+    return this.props.data.list.resto.find(el => el._id == restaurant)
+  }
   render(){    
     return (
       <ScrollView
@@ -158,13 +167,18 @@ class HomeScreen extends React.Component {
         <View style={styles.container}>
           {
             this.state.showdetail ?
-            <DetailPlatComponent item={this.state.detail} />
+            <DetailPlatComponent 
+              find_id={()=> this.find_id(this.state.detail.restaurant)} 
+              item={this.state.detail} 
+              close={()=> this.setState({showdetail: false})}
+            />
             :
-            this.props.data.list.map((item, i)=>(
+            this.props.data.list.plat.map((item, i)=>(
               <CardPlatComponent
                 key={i} 
                 i={i} 
                 item={item}
+                find_id={()=> this.find_id(item.restaurant)}
                 detail={()=> this.setState({detail: item, showdetail: true})}
               />
             ))

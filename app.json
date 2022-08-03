@@ -24,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/appicon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.bouffes.app"
     },
     "web": {
       "favicon": "./assets/appicon.png"

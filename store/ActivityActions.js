@@ -23,10 +23,13 @@ export const _panierAction = index => (
   }
 );
 
-export const listAction = index => (
+export const listAction = (index, value) => (
   {
     type: 'LIST',
-    payload: index,
+    payload: {
+      index: index,
+      value: value
+    },
   }
 );
 

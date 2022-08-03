@@ -19,7 +19,10 @@ const INITIAL_STATE = {
   panier: [],
   paniers: [],
   total: 0,
-  list: [],
+  list: {
+    plat: [],
+    resto: []
+  },
   user: {
     solde: 0,
     lieu: []
@@ -34,26 +37,6 @@ const INITIAL_STATE = {
   }
 
 };
-async function setsession (key, value) {
-  await AsyncStorage.setItem(key, JSON.stringify(value));
-}
-async function mergesession (key, value) {
-  await AsyncStorage.mergeItem(key, JSON.stringify(value));
-}
-async function getsession (key) {
-  const jsonValue = await AsyncStorage.getItem(key);
-  return jsonValue != null ? JSON.parse(jsonValue) : null;
-}
-async function session(key, value) {
-  let list = await getsession(key).then(()=>{
-    if (list != null && list != undefined) {
-      mergesession (key, value)
-    } else {
-      setsession (key, value)
-    }
-    //return value;
-  })
-}
 function tab_trie(array, index){
   var tab = [];
   for (let i = 0; i < array.length; i++) {
@@ -63,17 +46,6 @@ function tab_trie(array, index){
   }
   //console.log(tab);
   return tab;
-}
-function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
-  while (0 !== currentIndex) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-  return array;
 }
 function addPlat(array, element){
   var tab = [ element ];
@@ -95,27 +67,7 @@ function timeRem( end, time ){
     return ( ds ) ;
 }
 
-function createNotifications( data ) {
-    let tab = {
-      content: {
-        title: "Titre",
-        body: 'Detail',
-        data: {data: data},
-      },
-      trigger: { 
-        seconds: 1,
-        repeats: false,
-      },
-    }
-  
-    return tab;
-}
-async function scheduleAndCancel(array) {
-  await Notifications.cancelAllScheduledNotificationsAsync();
-  array.forEach(element => {
-    Notifications.scheduleNotificationAsync(element);
-  });
-}
+
 
 
 function sender(user, cars) {
@@ -201,11 +153,11 @@ function monReducer (state = INITIAL_STATE, action) {
       return nextState
 
     case 'LIST':
-      if (action.payload != null) {
-        state.list = action.payload
+      if (action.payload.value != null) {
+        state.list[action.payload.index] = action.payload.value
       }
 
-       session("client", state.list);
+      // session("client", state.list);
       
       nextState = {
           ...state,
@@ -333,31 +285,6 @@ function monReducer (state = INITIAL_STATE, action) {
           ...state,
           myState: state.myState
       }
-      return nextState
-
-    case 'NOTIFICATION':
-      if (action.payload != null) {
-        state.notifListSent = action.payload
-      } else {
-        state.notifListSent = state.notifListSent;
-      }
-      // session('notification', state.notifListSent);
-        
-        nextState = {
-            ...state,
-            notifListSent: state.notifListSent
-        }
-      return nextState
-
-    case 'NOTIFICATION_ADD':
-      let notifTab = addPlat( state.notifListSent, action.payload );
-
-      // session('notification', notifTab );
-        
-        nextState = {
-            ...state,
-            notifListSent: notifTab
-        }
       return nextState
 
     //...

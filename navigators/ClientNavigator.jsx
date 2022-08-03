@@ -9,7 +9,7 @@ import { setStateAction } from '../store/ActivityActions';
 import HomeScreen from '../screens/HomeScreen';
 import TestScreen from '../screens/TestScreen';
 
-import HomeHeaderComponent from '../components/HomeHeaderComponent';
+import HeaderComponent from '../components/HeaderComponent';
 import PanierButtonComponent from '../components/PanierButtonComponent';
 
 const Stack = createStackNavigator();
@@ -42,7 +42,7 @@ class ClientNavigator extends React.Component {
     return (
       <View style={{width: '100%', height:'100%' }}>
 
-        <HomeHeaderComponent 
+        <HeaderComponent 
           navigation={this.navigation} 
           showcard={this.state.showcard} 
           setshowcard={()=> this.setState({showcard: true})} 

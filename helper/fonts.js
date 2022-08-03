@@ -1,18 +1,5 @@
 import { Dimensions, Platform, PixelRatio } from 'react-native';
-import * as Font from 'expo-font';
 
-export async function loadFonts() {
-  await Font.loadAsync({
-    // Load a font `Montserrat` from a static resource
-    OpenSans: require('../assets/OpenSans/OpenSans-Regular.ttf'),
-
-    // Any string can be used as the fontFamily name. Here we use an object to provide more control
-    'OpenSans-Regular': {
-      uri: require('../assets/OpenSans/OpenSans-Regular.ttf'),
-      display: Font.FontDisplay.FALLBACK,
-    },
-  });
-}
 const {
   width: SCREEN_WIDTH,
   height: SCREEN_HEIGHT,

@@ -1,7 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Linking } from 'react-native';
-
-import { AntDesign, Octicons } from 'react-native-vector-icons';
+import { StyleSheet, Text, View, Image, Linking } from 'react-native';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -25,80 +23,59 @@ const mapStateToProps = (state) => {
 class DetailPlatComponent extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {};
+    this.state = {
+      identify: "",
+    };
   }
 
   componentWillUnmount() {
   }
-
   
-  async componentDidMount(){
+  componentDidMount(){
+    let stock = "";
+    for (const key in this.props.find_id().adresse.lieu[0].identify) {
+      if (this.props.find_id().adresse.lieu[0].identify[key] != null) {
+        stock = stock + this.props.find_id().adresse.lieu[0].identify[key] + ", "
+      }
+    }
+    this.setState({identify: stock})
   }
 
   render(){    
     return (
-      <View style={{width: "100%",height: "100%",flexWrap: "nowrap",alignItems: "center",borderRadius: 5,}}>
+      <View style={{width: "100%",height: "100%",flexWrap: "nowrap",alignItems: "center",borderRadius: 5, backgroundColor: '#FFF',}}>
 
-        <Image 
-          source={{ uri: this.props.item.photo }} 
-          style={{ width: "100%", height: "30%", resizeMode: "cover", borderTopRightRadius: 5, borderTopLeftRadius: 5, }}
-        />
-
-        <PhotoComponent photo={this.props.item.photo} />
-
-        <View style={{width: "100%",height: "10%", alignItems: "center", justifyContent: "space-between", flexDirection: "row", marginTop: "5%"}}>
-          <TouchableOpacity
-            style={{width: 50,height: "100%",alignItems: "center",justifyContent: "center"}}
-            onPress={()=> this.props.favorieAction(this.props.item)}
-          >
-            <AntDesign name='heart' size={25} style={{color: this.props.item.favorie ? "#B51827" : "#BBB",}}/>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={{width: 50,height: "100%",alignItems: "center",justifyContent: "center"}}
-            onPress={()=> this.props.panierAction(this.props.item)}
-          >
-            <Octicons name='diff-added' size={25} style={{color: "#FDC800",}}/>
-          </TouchableOpacity>
+        <View style={{ width: "100%", height: "40%",}}>
+          <PhotoComponent close={()=> this.props.close()} item={this.props.item} />
         </View>
 
-        <View style={{width: "100%", height: "70%", justifyContent: "space-around", padding: "5%", backgroundColor: '#FFF',}}>
+        <View style={{width: "100%", height: "60%",  padding: "5%"}}>
 
-          <Text style={styles.title}>Nom du restaurant: {this.props.item.restaurant.name}</Text>
-          <View style={{width: "100%", justifyContent: "space-between", flexDirection: "row"}}>
-            <Text style={styles.text}>Situé a: {this.props.item.restaurant.adresse.lieu[0].identify.name}</Text>
+          <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Restaurant: </Text>
+            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#000", fontSize: 16, }}> {this.props.find_id().name} </Text>
           </View>
-          <View style={{width: "100%", justifyContent: "space-between", flexDirection: "row"}}>
-            <Text style={styles.text}>
-              Numéro: {this.props.item.restaurant.adresse.contact.numero}
-            </Text>
+
+          <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Situé a: </Text>
+            <Text numberOfLines={2} style={{ width: "70%", fontWeight: "bold", color: "#000", fontSize: 16, }}> {this.state.identify} </Text>
           </View>
-          <View style={{width: "100%", justifyContent: "space-between", flexDirection: "row"}}>
-            <Text 
-              //onPress={async()=> await MailComposer.composeAsync({recipients : [this.props.item.restaurant.adresse.contact.email]})} 
-              style={styles.linking}
-            >
-            Email: {this.props.item.restaurant.adresse.contact.email}
-            </Text>
+          
+          <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Numéro: </Text>
+            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#B51827", fontSize: 16, }}> {this.props.find_id().adresse.contact.numero} </Text>
           </View>
-          {
-            this.props.item.restaurant.adresse.contact.web.map((z, i)=>(
-              <View key={i} style={{width: "100%", justifyContent: "space-between", flexDirection: "row"}}>
-                <Text onPress={()=> Linking.openURL(z)} style={styles.linking}>
-                  {z}
-                </Text>
-              </View>
-            ))
-          }
-          {
-            this.props.item.restaurant.photo != "" ?
-            <Image 
-              source={{ uri: this.props.item.restaurant.photo }} 
-              style={{ width: "100%", height: 200, resizeMode: "cover", marginVertical: 10}}
-            /> 
-            :
-            false
-          }
+
+          <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Email: </Text>
+            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#FDC800", fontSize: 16, }}> {this.props.find_id().adresse.contact.email} </Text>
+          </View>
+          
+          <View style={{width: "100%", justifyContent: "flex-start", flexDirection: "row", marginVertical: 10, }}>
+            <Text numberOfLines={1} style={{ width: "30%", color: "#BBB", fontSize: 16, }}>Site web: </Text>
+            <Text numberOfLines={1} style={{ width: "70%", fontWeight: "bold", color: "#FDC800", fontSize: 16, }}> {this.props.find_id().adresse.contact.web} </Text>
+          </View>
+
         </View>
       </View> 
     );
@@ -108,7 +85,8 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     marginVertical: 10,
-    textAlign: "justify"
+    textAlign: "justify",
+    fontSize: 15
   },
   text: {
     width: "70%",
