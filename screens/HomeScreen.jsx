@@ -80,16 +80,17 @@ class HomeScreen extends React.Component {
     this.props.listAction( "plat", this.shuffle(plats));
     this.props.listAction( "resto", this.shuffle(restos));
 
-    //this.getLocation(List);
+    // this.getLocation(plats);
     wait(2000).then(() =>{this.setState({refreshing: false})});
   }
 
   async getLocation(list){
     let { status } = await Location.requestForegroundPermissionsAsync();
     let location = await Location.getCurrentPositionAsync({});
+    log
     list.forEach(y => {
       y.distance = getDistance(
-        { latitude: y.restaurant.adresse.lieu[0].location.coords.latitude, longitude: y.restaurant.adresse.lieu[0].location.coords.longitude },
+        { latitude: this.find_id(y.restaurant).adresse.lieu[0].location.coords.latitude, longitude: this.find_id(y.restaurant).adresse.lieu[0].location.coords.longitude },
         { latitude: location.coords.latitude, longitude: location.coords.longitude }
       );
     });
@@ -124,8 +125,8 @@ class HomeScreen extends React.Component {
     return array;
   }
   
-  detail(i, item){
-    this.props.parseAction({i: i, item: item});
+  detail(item){
+    this.props.parseAction(item);
     //this.navigation.navigate('Restaurant');
   }
 
@@ -195,21 +196,13 @@ class HomeScreen extends React.Component {
                   i={i} 
                   item={item}
                   find_id={()=> this.find_id(item.restaurant)}
-                  detail={()=> this.setState({detail: item, showdetail: true})}
+                  detail={()=> this.detail(item)}
                 />
               ))
             }
           </View>
           <StatusBar style="auto" />
         </ScrollView>
-        {
-          this.state.showdetail &&
-          <DetailPlatComponent 
-            find_id={()=> this.find_id(this.state.detail.restaurant)} 
-            item={this.state.detail} 
-            close={()=> this.setState({showdetail: false})}
-          />
-        }
       </SafeAreaView>
     );
   }

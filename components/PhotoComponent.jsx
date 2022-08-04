@@ -54,7 +54,7 @@ class PhotoComponent extends React.Component {
           <Ionicons name="chevron-back" size={25} style={{color: this.props.item.favorie ? "#B51827" : "#BBB",}}/>
         </TouchableOpacity>
 
-        <Text numberOfLines={1} style={{width: "70%", color: "#FFF", fontSize: normalize(18), fontWeight: "bold"}}>{this.props.item.name}</Text>
+        <Text numberOfLines={1} style={{width: "70%", color: "#000", fontSize: normalize(18), fontWeight: "bold"}}>{this.props.item.name}</Text>
         <Text numberOfLines={1} style={{width: "20%", color: "#B51827", fontSize: normalize(18), fontWeight: "bold", textAlign: "center"}}>{this.props.item.prix} F</Text>
 
       </View>

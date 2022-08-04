@@ -25,7 +25,7 @@ function HeaderComponent(props) {
   return (
     <View style={styles.container}
     >
-      <TouchableOpacity onPress={()=> false}>
+      <TouchableOpacity onPress={onOpen}>
         <Entypo name='menu' size={normalize(30)} color="#000"/>
       </TouchableOpacity>
 
@@ -39,7 +39,7 @@ function HeaderComponent(props) {
       />
       
       <TouchableOpacity
-        onPress={onOpen}
+        onPress={()=> props.setshowcard()}
         style={{width: 50, height: "100%", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", }} >
         <AntDesign name='shoppingcart' size={normalize(25)} color="#000"/>
         {

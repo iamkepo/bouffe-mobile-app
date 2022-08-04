@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-
 import { AntDesign, Octicons } from 'react-native-vector-icons';
 
 import { connect } from 'react-redux';

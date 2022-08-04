@@ -11,6 +11,7 @@ import TestScreen from '../screens/TestScreen';
 
 import HeaderComponent from '../components/HeaderComponent';
 import PanierButtonComponent from '../components/PanierButtonComponent';
+import DetailPlatComponent from '../components/DetailPlatComponent';
 
 const Stack = createStackNavigator();
 
@@ -70,6 +71,8 @@ class ClientNavigator extends React.Component {
           showcard={this.state.showcard} 
           setshowcard={()=> this.setState({showcard: false})} 
         />
+        
+        { this.props.data.objet && <DetailPlatComponent /> }
 
       </View>
     );
