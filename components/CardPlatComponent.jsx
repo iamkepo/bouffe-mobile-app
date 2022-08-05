@@ -4,7 +4,7 @@ import { AntDesign, Octicons } from 'react-native-vector-icons';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { favorieAction, panierAction } from '../store/ActivityActions';
+import { favorieAction, panierAction, parseAction } from '../store/ActivityActions';
 
 import DoublePressMaterial from '../materials/DoublePressMaterial';
 import ButtonFullMaterial from '../materials/ButtonFullMaterial';
@@ -15,6 +15,7 @@ const mapDispatchToProps = dispatch => (
   bindActionCreators({
     favorieAction, 
     panierAction,
+    parseAction
   }, dispatch)
 );
 
@@ -26,7 +27,10 @@ const mapStateToProps = (state) => {
 class CardPlatComponent extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showdetail: false,
+    };
+    this.navigation = this.props.navigation;
   }
 
   componentWillUnmount() {
@@ -35,66 +39,69 @@ class CardPlatComponent extends React.Component {
   
   async componentDidMount(){
   }
-
+  
+  find_id() {
+    return this.props.data.list.resto.find(el => el._id == this.props.item.restaurant)
+  }
   render(){    
-    return (
-    <DoublePressMaterial
-      style={styles.plat}
-      singleTap={()=> this.props.detail()} 
-      doubleTap={()=> this.props.favorieAction(this.props.item)}
-      longTap={()=> false}
-      delay={300}
-    >
-      <View 
-        style={{
-          width: "100%",
-          height: "100%",
-          flexWrap: "nowrap",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderRadius: 5,
-        }}
+    return ( 
+      <DoublePressMaterial
+        style={styles.plat}
+        singleTap={()=> this.navigation.navigate('Detail',{ item: {...this.props.item, restaurant: this.find_id()} })} 
+        doubleTap={()=> this.props.favorieAction(this.props.item)}
+        longTap={()=> false}
+        delay={300}
       >
-        <Image 
-          source={{ uri: this.props.item.photo }} 
-          style={{ width: "40%", height: "100%", resizeMode: "cover", borderBottomLeftRadius: 5, borderTopLeftRadius: 5, backgroundColor: "#ECE31A" }}
-        />
-        <View style={{width: "60%", height: "100%", justifyContent: "space-around", padding: "2%"}}>
+        <View 
+          style={{
+            width: "100%",
+            height: "100%",
+            flexWrap: "nowrap",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderRadius: 5,
+          }}
+        >
+          <Image 
+            source={{ uri: this.props.item.photo }} 
+            style={{ width: "40%", height: "100%", resizeMode: "cover", borderBottomLeftRadius: 5, borderTopLeftRadius: 5, backgroundColor: "#ECE31A" }}
+          />
+          <View style={{width: "60%", height: "100%", justifyContent: "space-around", padding: "2%"}}>
 
-          <Text numberOfLines={1} style={{ fontSize: normalize(15), color: "#000", fontWeight: "bold" }}>{this.props.item.name} </Text>
+            <Text numberOfLines={1} style={{ fontSize: normalize(15), color: "#000", fontWeight: "bold" }}>{this.props.item.name} </Text>
 
-          <Text numberOfLines={1} style={{ color: "#BBB", fontSize: normalize(15) }}>Prix: 
-            <Text style={{ color: "#B51827", fontWeight: "bold"  }}> {this.props.item.prix} F </Text>
-          </Text>
-          
-          <Text numberOfLines={1}style={{ color: "#BBB", fontSize: normalize(12) }}>De: 
-            <Text style={{ color: "#000" }}> {this.props.find_id().name}</Text>
-          </Text>
-
-          <View style={{width: "100%", justifyContent: "space-between", flexDirection: "row"}}>
-            <Text numberOfLines={1} style={{ fontSize: normalize(11), color: "#BBB" }}>Avec  
-              <Text style={{ color: "#B51827" }}> {this.props.find_id().menu_length >=10 ? null : 0 }{this.props.find_id().menu_length} </Text>autres plats
-              { this.props.item.distance != undefined ? <> à <Text style={{ color: "#B51827" }}> {this.props.item.distance/1000} Km </Text> de vous </> :false }
+            <Text numberOfLines={1} style={{ color: "#BBB", fontSize: normalize(15) }}>Prix: 
+              <Text style={{ color: "#B51827", fontWeight: "bold"  }}> {this.props.item.prix} F </Text>
             </Text>
+            
+            <Text numberOfLines={1}style={{ color: "#BBB", fontSize: normalize(12) }}>De: 
+              <Text style={{ color: "#000" }}> {this.find_id().name}</Text>
+            </Text>
+
+            <View style={{width: "100%", justifyContent: "space-between", flexDirection: "row"}}>
+              <Text numberOfLines={1} style={{ fontSize: normalize(11), color: "#BBB" }}>Avec  
+                <Text style={{ color: "#B51827" }}> {this.find_id().menu_length >=10 ? null : 0 }{this.find_id().menu_length} </Text>autres plats
+                { this.props.item.distance != undefined ? <> à <Text style={{ color: "#B51827" }}> {this.props.item.distance/1000} Km </Text> de vous </> :false }
+              </Text>
+            </View>
+            <ButtonFullMaterial
+              bg= "#FDC800"
+              icon={true}
+              onPress={()=> this.props.panierAction({...this.props.item, restaurant: this.find_id()})}
+            >
+              <Octicons
+                name='diff-added'
+                size={normalize(25)}
+                style={{
+                  color: "#FFF",
+                }}
+              />
+              <Text numberOfLines={1} style={{ color: "#FFF", fontSize: normalize(18), fontWeight: "bold" }}>Ajouter au panier</Text>
+            </ButtonFullMaterial>
           </View>
-          <ButtonFullMaterial
-            bg= "#FDC800"
-            icon={true}
-            onPress={()=> this.props.panierAction({...this.props.item, restaurant: this.props.find_id()})}
-          >
-            <Octicons
-              name='diff-added'
-              size={normalize(25)}
-              style={{
-                color: "#FFF",
-              }}
-            />
-            <Text numberOfLines={1} style={{ color: "#FFF", fontSize: normalize(18), fontWeight: "bold" }}>Ajouter au panier</Text>
-          </ButtonFullMaterial>
         </View>
-      </View>
-    </DoublePressMaterial>
+      </DoublePressMaterial>
     );
   }
 }

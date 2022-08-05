@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { connect } from 'react-redux';
@@ -7,11 +6,7 @@ import { bindActionCreators } from 'redux';
 import { setStateAction } from '../store/ActivityActions';
 
 import HomeScreen from '../screens/HomeScreen';
-import TestScreen from '../screens/TestScreen';
-
-import HeaderComponent from '../components/HeaderComponent';
-import PanierButtonComponent from '../components/PanierButtonComponent';
-import DetailPlatComponent from '../components/DetailPlatComponent';
+import DetailPlatScreen from '../screens/DetailPlatScreen';
 
 const Stack = createStackNavigator();
 
@@ -29,9 +24,7 @@ const mapStateToProps = (state) => {
 class ClientNavigator extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      showcard : false
-    };
+    this.state = {};
     this.navigation = this.props.navigation;
   }
 
@@ -41,40 +34,22 @@ class ClientNavigator extends React.Component {
   }
   render(){
     return (
-      <View style={{width: '100%', height:'100%' }}>
-
-        <HeaderComponent 
-          navigation={this.navigation} 
-          showcard={this.state.showcard} 
-          setshowcard={()=> this.setState({showcard: true})} 
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen}
+          route={this.route} 
+          navigation={this.navigation}
+          options={{ headerLeft: false, headerTitle: false, headerStyle: { height: 0 },}} 
         />
-
-        <Stack.Navigator>
-          <Stack.Screen 
-            name="Home" 
-            component={HomeScreen}
-            route={this.route} 
-            navigation={this.navigation}
-            options={{ headerLeft: false, headerTitle: false, headerStyle: { height: 0 },}} 
-          />
-          <Stack.Screen 
-            name="Test" 
-            component={TestScreen}
-            route={this.route} 
-            navigation={this.navigation}
-            options={{ headerLeft: false, headerTitle: false, headerStyle: { height: 0 },}} 
-          />
-        </Stack.Navigator>
-
-        <PanierButtonComponent 
-          navigation={this.navigation} 
-          showcard={this.state.showcard} 
-          setshowcard={()=> this.setState({showcard: false})} 
+        <Stack.Screen 
+          name="Detail" 
+          component={DetailPlatScreen}
+          route={this.route} 
+          navigation={this.navigation}
+          options={{ headerLeft: false, headerTitle: false, headerStyle: { height: 0 },}} 
         />
-        
-        { this.props.data.objet && <DetailPlatComponent /> }
-
-      </View>
+      </Stack.Navigator>
     );
   }
 }

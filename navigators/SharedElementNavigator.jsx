@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { listAction } from '../store/ActivityActions';
 
-import DetailPlatComponent from '../components/DetailPlatComponent';
+import DetailPlatComponent from '../screens/DetailPlatComponent';
 import CardPlatComponent from '../components/CardPlatComponent';
 
 import { normalize } from "../helper/fonts";

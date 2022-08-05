@@ -10,11 +10,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { favorieAction, panierAction, parseAction, listAction } from '../store/ActivityActions';
 
-import DetailPlatComponent from '../components/DetailPlatComponent';
 import CardPlatComponent from '../components/CardPlatComponent';
 
 import { plats, restos } from '../helper/const';
 import { normalize } from "../helper/fonts";
+
+import HeaderComponent from '../components/HeaderComponent';
 
 
 const mapDispatchToProps = dispatch => (
@@ -41,11 +42,10 @@ class HomeScreen extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      showcard : false,
       trie_d: false,
       trie_p: false,
       refreshing: false,
-      showdetail: false,
-      detail: {},
       list: []
     };
     this.navigation = this.props.navigation;
@@ -125,15 +125,6 @@ class HomeScreen extends React.Component {
     return array;
   }
   
-  detail(item){
-    this.props.parseAction(item);
-    //this.navigation.navigate('Restaurant');
-  }
-
-  find_id(restaurant) {
-    return this.props.data.list.resto.find(el => el._id == restaurant)
-  }
-  
   async updateSearch(text) {
     this.setState({query: text});
     if (text != "" ){
@@ -152,6 +143,9 @@ class HomeScreen extends React.Component {
   render(){    
     return (
       <SafeAreaView style={styles.container}>
+
+        <HeaderComponent navigation={this.navigation} />
+
         <TextInput
           style={styles.textInput}
           placeholder="Recherche"
@@ -191,18 +185,14 @@ class HomeScreen extends React.Component {
           <View style={styles.sous}>
             {
               this.props.data.list.plat.map((item, i)=>(
-                <CardPlatComponent
-                  key={i} 
-                  i={i} 
-                  item={item}
-                  find_id={()=> this.find_id(item.restaurant)}
-                  detail={()=> this.detail(item)}
-                />
+                <CardPlatComponent key={i} item={item} navigation={this.navigation} />
               ))
             }
           </View>
+
           <StatusBar style="auto" />
         </ScrollView>
+        
       </SafeAreaView>
     );
   }
@@ -219,8 +209,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 0,
     borderRadius: 6,
-    marginTop: "-5%",
-    marginBottom: "5%",
+    marginVertical: "5%",
     paddingHorizontal: "5%",
     backgroundColor: '#FFF',
     fontSize: normalize(14)
